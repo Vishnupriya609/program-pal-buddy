@@ -4,49 +4,18 @@ import { Play, RotateCcw, Download } from "lucide-react";
 import { useState } from "react";
 import QuantumGateLibrary from "./QuantumGateLibrary";
 import QuantumCircuit from "./QuantumCircuit";
-import CodeExportDialog from "./CodeExportDialog";
-import { generateQiskitCode, generateMicroPythonCode, generateArduinoCode } from "@/utils/codeGenerator";
-import { toast } from "@/hooks/use-toast";
 
 const CircuitBuilder = () => {
   const [selectedGate, setSelectedGate] = useState<string | null>(null);
   const [circuit, setCircuit] = useState<Array<{ gate: string; qubit: number; position: number }>>([]);
-  const [showExportDialog, setShowExportDialog] = useState(false);
-  const [isSimulating, setIsSimulating] = useState(false);
 
   const handleRunSimulation = () => {
-    setIsSimulating(true);
     console.log("Running simulation with circuit:", circuit);
-    
-    // Simulate quantum computation
-    setTimeout(() => {
-      setIsSimulating(false);
-      toast({
-        title: "Simulation Complete!",
-        description: `Executed ${circuit.length} quantum gates successfully.`,
-      });
-    }, 1500);
   };
 
   const handleReset = () => {
     setCircuit([]);
     setSelectedGate(null);
-    toast({
-      title: "Circuit Reset",
-      description: "All gates have been removed from the circuit.",
-    });
-  };
-
-  const handleExport = () => {
-    if (circuit.length === 0) {
-      toast({
-        title: "Empty Circuit",
-        description: "Please add some gates before exporting.",
-        variant: "destructive",
-      });
-      return;
-    }
-    setShowExportDialog(true);
   };
 
   return (
@@ -86,23 +55,21 @@ const CircuitBuilder = () => {
                 onClick={handleRunSimulation}
                 size="lg"
                 className="quantum-glow"
-                disabled={circuit.length === 0 || isSimulating}
+                disabled={circuit.length === 0}
               >
                 <Play className="mr-2 w-5 h-5" />
-                {isSimulating ? "Simulating..." : "Run Simulation"}
+                Run Simulation
               </Button>
               <Button 
                 onClick={handleReset}
                 size="lg"
                 variant="outline"
                 className="border-primary/30"
-                disabled={isSimulating}
               >
                 <RotateCcw className="mr-2 w-5 h-5" />
                 Reset Circuit
               </Button>
               <Button 
-                onClick={handleExport}
                 size="lg"
                 variant="outline"
                 className="border-primary/30"
@@ -115,15 +82,6 @@ const CircuitBuilder = () => {
           </div>
         </div>
       </div>
-
-      {/* Code Export Dialog */}
-      <CodeExportDialog
-        open={showExportDialog}
-        onOpenChange={setShowExportDialog}
-        qiskitCode={generateQiskitCode(circuit, 3)}
-        microPythonCode={generateMicroPythonCode(circuit, 3)}
-        arduinoCode={generateArduinoCode(circuit, 3)}
-      />
     </section>
   );
 };
