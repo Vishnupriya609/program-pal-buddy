@@ -44,7 +44,11 @@ const Hero = () => {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-          <Button size="lg" className="quantum-glow text-lg px-8 py-6">
+          <Button 
+            size="lg" 
+            className="quantum-glow text-lg px-8 py-6"
+            onClick={() => document.getElementById('circuit-builder')?.scrollIntoView({ behavior: 'smooth' })}
+          >
             Launch Simulator
             <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
