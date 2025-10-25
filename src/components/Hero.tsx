@@ -52,7 +52,12 @@ const Hero = () => {
             Launch Simulator
             <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
-          <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-primary/30 hover:border-primary">
+          <Button 
+            size="lg" 
+            variant="outline" 
+            className="text-lg px-8 py-6 border-primary/30 hover:border-primary"
+            onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })}
+          >
             <Cpu className="mr-2 w-5 h-5" />
             View Documentation
           </Button>
