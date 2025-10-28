@@ -7,6 +7,8 @@ import QuantumCircuit from "./QuantumCircuit";
 import CodeExportDialog from "./CodeExportDialog";
 import { generateQiskitCode, generateMicroPythonCode, generateArduinoCode } from "@/utils/codeGenerator";
 import { toast } from "@/hooks/use-toast";
+import BlochSphere from "./BlochSphere";
+import MeasurementChart from "./MeasurementChart";
 
 const CircuitBuilder = () => {
   const [selectedGate, setSelectedGate] = useState<string | null>(null);
@@ -111,6 +113,17 @@ const CircuitBuilder = () => {
                 <Download className="mr-2 w-5 h-5" />
                 Export Code
               </Button>
+            </div>
+
+            {/* Visualizations */}
+            <div className="grid md:grid-cols-2 gap-6 mt-8">
+              <div>
+                <h3 className="text-xl font-semibold mb-4 text-center">Bloch Sphere</h3>
+                <BlochSphere theta={Math.PI / 4} phi={Math.PI / 4} />
+              </div>
+              <div>
+                <MeasurementChart />
+              </div>
             </div>
           </div>
         </div>
