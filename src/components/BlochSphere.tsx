@@ -1,81 +1,113 @@
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Sphere, Line, Text } from '@react-three/drei';
-import { Vector3 } from 'three';
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
-interface BlochSphereProps {
-  theta?: number;
-  phi?: number;
+interface GateMatrix {
+  name: string;
+  symbol: string;
+  matrix: string[][];
+  color: string;
+  description: string;
 }
 
-const BlochSphere = ({ theta = 0, phi = 0 }: BlochSphereProps) => {
-  // Convert spherical coordinates to Cartesian for state vector
-  const x = Math.sin(theta) * Math.cos(phi);
-  const y = Math.sin(theta) * Math.sin(phi);
-  const z = Math.cos(theta);
+const gateMatrices: GateMatrix[] = [
+  {
+    name: "Hadamard",
+    symbol: "H",
+    matrix: [
+      ["1/√2", "1/√2"],
+      ["1/√2", "-1/√2"]
+    ],
+    color: "bg-blue-500/20 border-blue-500",
+    description: "Creates superposition"
+  },
+  {
+    name: "Pauli-X",
+    symbol: "X",
+    matrix: [
+      ["0", "1"],
+      ["1", "0"]
+    ],
+    color: "bg-red-500/20 border-red-500",
+    description: "Quantum NOT gate"
+  },
+  {
+    name: "Pauli-Y",
+    symbol: "Y",
+    matrix: [
+      ["0", "-i"],
+      ["i", "0"]
+    ],
+    color: "bg-green-500/20 border-green-500",
+    description: "Rotation around Y-axis"
+  },
+  {
+    name: "Pauli-Z",
+    symbol: "Z",
+    matrix: [
+      ["1", "0"],
+      ["0", "-1"]
+    ],
+    color: "bg-purple-500/20 border-purple-500",
+    description: "Phase flip gate"
+  },
+  {
+    name: "T Gate",
+    symbol: "T",
+    matrix: [
+      ["1", "0"],
+      ["0", "e^(iπ/4)"]
+    ],
+    color: "bg-amber-500/20 border-amber-500",
+    description: "π/8 phase gate"
+  },
+  {
+    name: "CNOT",
+    symbol: "CNOT",
+    matrix: [
+      ["1", "0", "0", "0"],
+      ["0", "1", "0", "0"],
+      ["0", "0", "0", "1"],
+      ["0", "0", "1", "0"]
+    ],
+    color: "bg-cyan-500/20 border-cyan-500",
+    description: "Controlled-NOT gate"
+  }
+];
 
-  const stateVector = new Vector3(x, y, z);
-
+const GateMatrixDisplay = () => {
   return (
-    <div className="w-full h-[400px] bg-background/50 rounded-lg border border-primary/20">
-      <Canvas camera={{ position: [3, 3, 3], fov: 50 }}>
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} intensity={1} />
-        
-        {/* Main sphere */}
-        <Sphere args={[1, 32, 32]}>
-          <meshStandardMaterial 
-            color="#9b87f5" 
-            transparent 
-            opacity={0.2} 
-            wireframe
-          />
-        </Sphere>
-
-        {/* X, Y, Z axes */}
-        <Line
-          points={[[-1.5, 0, 0], [1.5, 0, 0]]}
-          color="#ef4444"
-          lineWidth={2}
-        />
-        <Line
-          points={[[0, -1.5, 0], [0, 1.5, 0]]}
-          color="#22c55e"
-          lineWidth={2}
-        />
-        <Line
-          points={[[0, 0, -1.5], [0, 0, 1.5]]}
-          color="#3b82f6"
-          lineWidth={2}
-        />
-
-        {/* State vector */}
-        <Line
-          points={[[0, 0, 0], [x, y, z]]}
-          color="#fbbf24"
-          lineWidth={3}
-        />
-        <Sphere args={[0.08]} position={[x, y, z]}>
-          <meshStandardMaterial color="#fbbf24" />
-        </Sphere>
-
-        {/* Labels */}
-        <Text position={[1.7, 0, 0]} fontSize={0.2} color="#ef4444">
-          X
-        </Text>
-        <Text position={[0, 1.7, 0]} fontSize={0.2} color="#22c55e">
-          Y
-        </Text>
-        <Text position={[0, 0, 1.5]} fontSize={0.2} color="#3b82f6">
-          |0⟩
-        </Text>
-        <Text position={[0, 0, -1.5]} fontSize={0.2} color="#3b82f6">
-          |1⟩
-        </Text>
-
-        <OrbitControls enableZoom={true} enablePan={false} />
-      </Canvas>
-    </div>
+    <Card className="p-6">
+      <h3 className="text-xl font-semibold mb-4 text-foreground">Quantum Gate Matrices</h3>
+      <div className="grid grid-cols-2 gap-4 max-h-[400px] overflow-y-auto">
+        {gateMatrices.map((gate) => (
+          <div key={gate.symbol} className={`p-4 rounded-lg border ${gate.color}`}>
+            <div className="flex items-center justify-between mb-2">
+              <Badge variant="outline" className="font-mono text-lg">
+                {gate.symbol}
+              </Badge>
+              <span className="text-sm text-muted-foreground">{gate.name}</span>
+            </div>
+            <div className="font-mono text-sm my-3">
+              <div className="flex items-center justify-center">
+                <span className="text-2xl mr-2">[</span>
+                <div className="flex flex-col gap-1">
+                  {gate.matrix.map((row, i) => (
+                    <div key={i} className="flex gap-2">
+                      {row.map((val, j) => (
+                        <span key={j} className="w-16 text-center">{val}</span>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+                <span className="text-2xl ml-2">]</span>
+              </div>
+            </div>
+            <p className="text-xs text-muted-foreground text-center">{gate.description}</p>
+          </div>
+        ))}
+      </div>
+    </Card>
   );
 };
 
-export default BlochSphere;
+export default GateMatrixDisplay;

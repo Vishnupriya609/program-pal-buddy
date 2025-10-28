@@ -7,8 +7,8 @@ import QuantumCircuit from "./QuantumCircuit";
 import CodeExportDialog from "./CodeExportDialog";
 import { generateQiskitCode, generateMicroPythonCode, generateArduinoCode } from "@/utils/codeGenerator";
 import { toast } from "@/hooks/use-toast";
-import BlochSphere from "./BlochSphere";
-import MeasurementChart from "./MeasurementChart";
+import GateMatrixDisplay from "./BlochSphere";
+import GateProperties from "./MeasurementChart";
 
 const CircuitBuilder = () => {
   const [selectedGate, setSelectedGate] = useState<string | null>(null);
@@ -115,16 +115,10 @@ const CircuitBuilder = () => {
               </Button>
             </div>
 
-            {/* Visualizations */}
-            <div className="grid md:grid-cols-2 gap-6 mt-8">
-              <div>
-                <h3 className="text-xl font-semibold mb-4 text-center">Bloch Sphere</h3>
-                <BlochSphere theta={Math.PI / 4} phi={Math.PI / 4} />
-              </div>
-              <div>
-                <MeasurementChart />
-              </div>
-            </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+          <GateMatrixDisplay />
+          <GateProperties circuit={circuit} />
+        </div>
           </div>
         </div>
       </div>
