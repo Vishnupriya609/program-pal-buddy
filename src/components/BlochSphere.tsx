@@ -16,17 +16,20 @@ const BlochSphere = ({ theta = 0, phi = 0 }: BlochSphereProps) => {
   const stateVector = new Vector3(x, y, z);
 
   return (
-    <div className="w-full h-[400px] bg-background/50 rounded-lg border border-primary/20">
-      <Canvas camera={{ position: [3, 3, 3], fov: 50 }}>
+    <div className="w-full h-[400px] bg-card/50 rounded-lg border border-primary/20 backdrop-blur">
+      <Canvas 
+        camera={{ position: [3, 3, 3], fov: 50 }}
+        gl={{ preserveDrawingBuffer: true, antialias: true }}
+      >
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={1} />
         
         {/* Main sphere */}
         <Sphere args={[1, 32, 32]}>
           <meshStandardMaterial 
-            color="#9b87f5" 
+            color="hsl(var(--primary))"
             transparent 
-            opacity={0.2} 
+            opacity={0.15} 
             wireframe
           />
         </Sphere>
@@ -52,10 +55,10 @@ const BlochSphere = ({ theta = 0, phi = 0 }: BlochSphereProps) => {
         <Line
           points={[[0, 0, 0], [x, y, z]]}
           color="#fbbf24"
-          lineWidth={3}
+          lineWidth={4}
         />
-        <Sphere args={[0.08]} position={[x, y, z]}>
-          <meshStandardMaterial color="#fbbf24" />
+        <Sphere args={[0.1]} position={[x, y, z]}>
+          <meshStandardMaterial color="#fbbf24" emissive="#fbbf24" emissiveIntensity={0.5} />
         </Sphere>
 
         {/* Labels */}

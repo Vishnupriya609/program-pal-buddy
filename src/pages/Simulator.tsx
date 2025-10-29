@@ -24,7 +24,7 @@ const Simulator = () => {
     let currentPhi = 0;
     const probs = Array(8).fill(0);
     
-    // Default state
+    // Default state |0⟩
     if (circuit.length === 0) {
       probs[0] = 100; // |000⟩
       return { theta: currentTheta, phi: currentPhi, probabilities: probs };
@@ -32,17 +32,20 @@ const Simulator = () => {
 
     // Simple simulation logic based on gates
     circuit.forEach(({ gate, qubit }) => {
-      switch (gate) {
+      const gateUpper = gate.toUpperCase();
+      
+      switch (gateUpper) {
         case 'H': // Hadamard creates superposition
           if (qubit === 0) {
-            currentTheta = Math.PI / 4;
+            currentTheta = Math.PI / 2;
             probs[0] = 50;
             probs[1] = 50;
           }
           break;
-        case 'X': // Pauli-X flips state
+        case 'X': // Pauli-X flips state (NOT gate)
           if (qubit === 0) {
             currentTheta = Math.PI;
+            probs[0] = 0;
             probs[1] = 100;
           }
           break;
@@ -50,6 +53,7 @@ const Simulator = () => {
           if (qubit === 0) {
             currentTheta = Math.PI / 2;
             currentPhi = Math.PI / 2;
+            probs[0] = 0;
             probs[1] = 100;
           }
           break;
@@ -60,15 +64,14 @@ const Simulator = () => {
           currentPhi += Math.PI / 4;
           break;
         case 'CNOT': // CNOT creates entanglement
-          if (circuit.length > 1) {
-            probs[0] = 50;
-            probs[7] = 50; // |000⟩ and |111⟩ entangled state
-          }
+          probs[0] = 50;
+          probs[7] = 50; // |000⟩ and |111⟩ entangled state
+          currentTheta = Math.PI / 4;
           break;
       }
     });
 
-    // Normalize probabilities if needed
+    // Normalize probabilities
     const sum = probs.reduce((a, b) => a + b, 0);
     if (sum > 0) {
       probs.forEach((_, i) => {
