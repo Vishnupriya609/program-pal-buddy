@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Cpu, Zap } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
+  const navigate = useNavigate();
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
       {/* Animated background */}
@@ -47,7 +49,7 @@ const Hero = () => {
           <Button 
             size="lg" 
             className="quantum-glow text-lg px-8 py-6"
-            onClick={() => document.getElementById('circuit-builder')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() => navigate('/simulator')}
           >
             Launch Simulator
             <ArrowRight className="ml-2 w-5 h-5" />
